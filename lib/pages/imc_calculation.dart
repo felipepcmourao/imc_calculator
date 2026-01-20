@@ -132,16 +132,14 @@ class _ImcCalculationState extends State<ImcCalculation> {
           ),
           SizedBox(height: 30),
           Center(
-            child: Expanded(
-              child: TextButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => HistoryPage()),
-                  );
-                },
-                child: Text("Ver histórico de medições"),
-              ),
+            child: TextButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => HistoryPage()),
+                );
+              },
+              child: Text("Ver histórico de medições"),
             ),
           ),
         ],
