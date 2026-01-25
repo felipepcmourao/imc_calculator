@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:imc_calculator/model/history.dart';
-import 'package:imc_calculator/repository/history_repository.dart';
+import 'package:imc_calculator/model/history_sqlite_model.dart';
+import 'package:imc_calculator/repository/history_sqlite_repository.dart';
 
 class HistoryPage extends StatefulWidget {
   const HistoryPage({super.key});
@@ -10,17 +10,17 @@ class HistoryPage extends StatefulWidget {
 }
 
 class _HistoryPageState extends State<HistoryPage> {
-  var historyRepository = HistoryRepository();
-  var _historylist = <History>[];
+  HistorySqliteRepository historySqliteRepository = HistorySqliteRepository();
+  var _historySqlite = <HistorySqliteModel>[];
 
   @override
   void initState() {
     super.initState();
-    listHistory();
+    listHistorySqlite();
   }
 
-  void listHistory() async {
-    _historylist = await historyRepository.listHistory();
+  void listHistorySqlite() async {
+    _historySqlite = await historySqliteRepository.getData();
     setState(() {});
   }
 
@@ -37,9 +37,9 @@ class _HistoryPageState extends State<HistoryPage> {
     return Scaffold(
       appBar: AppBar(title: Text("Histórico de medições")),
       body: ListView.builder(
-        itemCount: _historylist.length,
+        itemCount: _historySqlite.length,
         itemBuilder: (BuildContext bc, int index) {
-          var historyList = _historylist[index];
+          var historyList = _historySqlite[index];
           return Column(
             children: [
               Dismissible(
@@ -56,13 +56,12 @@ class _HistoryPageState extends State<HistoryPage> {
                     ],
                   ),
                 ),
-                key: Key(historyList.id),
-                onDismissed: (direction) {
-                  historyRepository.removeHistory(historyList);
-                  setState(() {
-                    _historylist.removeAt(index);
-                    listHistory();
-                  });
+                key: ValueKey(historyList.id ?? index),
+                onDismissed: (direction) async {
+                  if (historyList.id != null) {
+                    await historySqliteRepository.remove(historyList.id!);
+                  }
+                  listHistorySqlite();
                 },
 
                 child: ListTile(

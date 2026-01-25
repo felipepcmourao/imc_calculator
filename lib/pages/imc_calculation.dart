@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:imc_calculator/model/history.dart';
 import 'package:imc_calculator/pages/history_page.dart';
-import 'package:imc_calculator/repository/history_repository.dart';
+import 'package:imc_calculator/model/history_sqlite_model.dart';
+import 'package:imc_calculator/repository/history_sqlite_repository.dart';
 import 'package:imc_calculator/service/calcular_imc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ImcCalculation extends StatefulWidget {
   const ImcCalculation({super.key});
@@ -16,7 +17,23 @@ class _ImcCalculationState extends State<ImcCalculation> {
   var resultado = "";
   var peso = TextEditingController();
   var altura = TextEditingController();
-  var historyRepository = HistoryRepository();
+  var historySqliteRepository = HistorySqliteRepository();
+  var name = TextEditingController();
+
+  late SharedPreferences prefs;
+
+  void getData() async {
+    prefs = await SharedPreferences.getInstance();
+    setState(() {
+      name.text = prefs.getString('name') ?? "";
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getData();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,6 +57,18 @@ class _ImcCalculationState extends State<ImcCalculation> {
             ),
           ),
           SizedBox(height: 40),
+          Container(
+            margin: EdgeInsets.symmetric(horizontal: 30),
+            child: Text(
+              "Seu nome",
+              style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.symmetric(horizontal: 30),
+            child: TextField(controller: name),
+          ),
+          SizedBox(height: 30),
           Container(
             margin: EdgeInsets.symmetric(horizontal: 30),
             child: Text(
@@ -89,9 +118,11 @@ class _ImcCalculationState extends State<ImcCalculation> {
                     double.parse(altura.text.replaceAll(",", ".")),
                   ));
 
-                  await historyRepository.addHistory(
-                    History(resultado, DateTime.now()),
+                  await historySqliteRepository.save(
+                    HistorySqliteModel(calculatedIMC: resultado, date: DateTime.now()),
                   );
+
+                  await prefs.setString('name', name.text);
                 }
                 setState(() {});
               },
