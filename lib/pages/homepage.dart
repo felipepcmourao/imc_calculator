@@ -12,7 +12,7 @@ class _HomepageState extends State<Homepage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 214, 236, 247),
+      backgroundColor: const Color.fromARGB(255, 214, 20, 10),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
