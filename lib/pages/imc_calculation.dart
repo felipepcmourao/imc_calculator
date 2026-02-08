@@ -21,7 +21,7 @@ class _ImcCalculationState extends State<ImcCalculation> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 214, 236, 247),
+      backgroundColor: const Color.fromARGB(255, 210, 20, 29),
       appBar: AppBar(title: Text("Calcule seu IMC")),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
