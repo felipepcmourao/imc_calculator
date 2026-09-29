@@ -24,8 +24,6 @@ Built in January 2026 as a course exercise and extended afterwards. The interfac
 
 ## Known issues and next steps
 
-I keep these public on purpose:
-
 - [#2](../../issues/2) No tests yet: boundary tests for each BMI category are planned.
 - [#3](../../issues/3) Invalid input is not rejected: a height of zero returns *Obesidade Grau III* instead of an error.
 
